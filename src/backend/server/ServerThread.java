@@ -50,7 +50,7 @@ public class ServerThread implements Runnable {
             while (!socket.isClosed()) {
                 if (serverInStream.available() > 0) {
                     if (serverIn.hasNextLine()) {
-			textArea.append(serverIn.nextLine());
+			textArea.append(serverIn.nextLine() + "\n");
                     }
 		}
 		if (hasMessages) {

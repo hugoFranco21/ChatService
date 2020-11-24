@@ -50,11 +50,11 @@ public class Server implements Runnable{
 	}
 
 	private void acceptClients(ServerSocket serverSocket) {
-		textArea.append("server starts port = " + serverSocket.getLocalSocketAddress());
+		textArea.append("server starts port = " + serverSocket.getLocalSocketAddress() + "\n");
 		while (true) {
 			try {
 				Socket socket = serverSocket.accept();
-				textArea.append("accepts : " + socket.getRemoteSocketAddress());
+				textArea.append("accepts : " + socket.getRemoteSocketAddress() + "\n");
 				ClientThread client = new ClientThread(this, socket);
 				Thread thread = new Thread(client);
 				thread.start();
