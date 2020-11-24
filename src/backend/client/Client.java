@@ -18,39 +18,19 @@ import javax.swing.JTextArea;
 
 public class Client implements Runnable{
 
-    /* Future versions could change host to an ip
- * instead of localhost */    
+    /*
+        The client class represent someone trying to connect to the server to chat
+    */
     private final int portNumber = 4444;
-
     private String userName;
     private String input;
     private String serverHost;
-    private int serverPort;
     private JTextArea messageIn;
     private JTextArea messagesOut;
     private JButton acceptInput;
     private ServerThread serverThread;
 
-    /*public static void main(String[] args) {
-	String readName = null;
-	Scanner scan = new Scanner(System.in);
-	System.out.println("Please input username:");
-	/* Small validator so users dont use an empty name 
-	while (readName == null || readName.trim().equals("")) {
-            // null, empty, whitespace(s) not allowed.
-            readName = scan.nextLine();
-            if (readName.trim().equals("")) {
-		System.out.println("Invalid. Please enter again:");
-            }
-	}
-		
-	/* Client creating functionality can be delegated to a factory 
-	Client client = new Client(readName);
-		
-		/* The function below connects the user with the server 
-	client.startClient(scan);
-    }*/
-
+    /* Client receives UI components so it can update them */
     public Client(String userName, JTextArea messageIn, JButton acceptInput, JTextArea messagesOut) {
 	this.userName = userName;
 	this.serverHost = "localhost";
@@ -65,20 +45,15 @@ public class Client implements Runnable{
             Thread.sleep(1000); // waiting for network communicating.
             serverThread = new ServerThread(socket, userName, messagesOut);
             Thread serverAccessThread = new Thread(serverThread);
+            
+            /* Listener gets added to the butto nso it waits for the input */
             acceptInput.addActionListener((e)->{
                 sendMessage();
             });
             serverAccessThread.start();
             while (serverAccessThread.isAlive()) {
-		
-                
-		// NOTE: scan.hasNextLine waits input (in the other words block this thread's
-		// process).
-		// NOTE: If you use buffered reader or something else not waiting way,
-		// NOTE: I recommends write waiting short time like following.
-		// else {
+		/* Keep loooping */
 		Thread.sleep(200);
-		// }
             }
 
 
@@ -90,21 +65,14 @@ public class Client implements Runnable{
 	}
     }
     
+    /* Message gets sent from the box to the server */
     public void sendMessage(){
         input = messageIn.getText();
         serverThread.addNextMessage(input);
         messageIn.setText("");
     }
 
-    public class MyClass implements ActionListener { 
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            input = messageIn.getText();
-        }
-        
-    }
-    
+    /* Need to be a runnable so the main animation method does not block itself */
     @Override
     public void run() {
         try{
