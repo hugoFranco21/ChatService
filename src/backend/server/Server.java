@@ -13,15 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import backend.client.ClientThread;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import javax.swing.JTextArea;
 
-public class Server{
+public class Server implements Runnable{
 
 	private final int portNumber = 4444;
 
 	private String password;
-        private PrintStream stream;
+        private JTextArea textArea;
 	private List<ClientThread> clients; // or "protected static List<ClientThread> clients;"
 
 	/*public static void main(String[] args) {
@@ -29,9 +28,9 @@ public class Server{
 		server.startServer();
 	}*/
 
-	public Server(String password, PrintStream stream) {
+	public Server(String password, JTextArea textArea) {
 		this.password = password;
-                this.stream = stream;
+                this.textArea = textArea;
 	}
 
 	public List<ClientThread> getClients() {
@@ -45,23 +44,23 @@ public class Server{
 			serverSocket = new ServerSocket(portNumber);
 			acceptClients(serverSocket);
 		} catch (IOException e) {
-			stream.println("Could not listen on port: " + portNumber);
+			textArea.append("Could not listen on port: " + portNumber);
 			System.exit(1);
 		}
 	}
 
 	private void acceptClients(ServerSocket serverSocket) {
-		stream.println("server starts port = " + serverSocket.getLocalSocketAddress());
+		textArea.append("server starts port = " + serverSocket.getLocalSocketAddress());
 		while (true) {
 			try {
 				Socket socket = serverSocket.accept();
-				stream.println("accepts : " + socket.getRemoteSocketAddress());
+				textArea.append("accepts : " + socket.getRemoteSocketAddress());
 				ClientThread client = new ClientThread(this, socket);
 				Thread thread = new Thread(client);
 				thread.start();
 				clients.add(client);
 			} catch (IOException ex) {
-				stream.println("Accept failed on : " + portNumber);
+				textArea.append("Accept failed on : " + portNumber);
 			}
 		}
 	}
@@ -78,6 +77,12 @@ public class Server{
 	public void setClients(List<ClientThread> clients) {
 		this.clients = clients;
 	}
+
+    @Override
+    public void run() {
+        startServer();
+        
+    }
 	
 	
 }

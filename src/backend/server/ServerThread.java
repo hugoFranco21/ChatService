@@ -11,17 +11,20 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.Scanner;
+import javax.swing.JTextArea;
 
 public class ServerThread implements Runnable {
     private Socket socket;
     private String userName;
     private final LinkedList<String> messagesToSend;
     private boolean hasMessages = false;
+    private JTextArea textArea;
 
-    public ServerThread(Socket socket, String userName) {
+    public ServerThread(Socket socket, String userName, JTextArea textArea) {
 	this.socket = socket;
 	this.userName = userName;
 	messagesToSend = new LinkedList<String>();
+        this.textArea = textArea;
     }
 
     public void addNextMessage(String message) {
@@ -33,9 +36,9 @@ public class ServerThread implements Runnable {
 
     @Override
     public void run() {
-	System.out.println("Welcome :" + userName);
-        System.out.println("Local Port :" + socket.getLocalPort());
-	System.out.println("Server = " + socket.getRemoteSocketAddress() + ":" + socket.getPort());
+	textArea.append("Welcome :" + userName + "\n");
+        textArea.append("Local Port :" + socket.getLocalPort() + "\n");
+	textArea.append("Server = " + socket.getRemoteSocketAddress() + ":" + socket.getPort() + "\n");
 	try {
             PrintWriter serverOut = new PrintWriter(socket.getOutputStream(), false);
             InputStream serverInStream = socket.getInputStream();
@@ -47,7 +50,7 @@ public class ServerThread implements Runnable {
             while (!socket.isClosed()) {
                 if (serverInStream.available() > 0) {
                     if (serverIn.hasNextLine()) {
-			System.out.println(serverIn.nextLine());
+			textArea.append(serverIn.nextLine());
                     }
 		}
 		if (hasMessages) {
@@ -56,7 +59,7 @@ public class ServerThread implements Runnable {
                         nextSend = messagesToSend.pop();
                         hasMessages = !messagesToSend.isEmpty();
                     }
-                    serverOut.println(userName + "> " + nextSend);
+                    serverOut.println(userName + "> " + nextSend + "\n");
                     serverOut.flush();
 		}
             }

@@ -5,6 +5,9 @@
  */
 package frontend.client;
 
+import backend.client.Client;
+import frontend.server.ServerGUI;
+
 /**
  *
  * @author hfran
@@ -14,9 +17,12 @@ public class ClientGUI extends javax.swing.JFrame {
     /**
      * Creates new form ClientGUI
      */
+    public static Client c;
+    
     public ClientGUI() {
         super("Client");
         initComponents();
+        myInit();
     }
 
     /**
@@ -28,56 +34,190 @@ public class ClientGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
+        mainPanel = new javax.swing.JPanel();
+        mainScroll = new javax.swing.JScrollPane();
+        textIn = new javax.swing.JTextArea();
+        secScroll = new javax.swing.JScrollPane();
+        messageArea = new javax.swing.JTextArea();
+        sendButton = new javax.swing.JButton();
+        passPanel = new javax.swing.JPanel();
+        passwordInput = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        submitPasswordButton = new javax.swing.JButton();
+        passwordError = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        userInput = new javax.swing.JTextField();
+        userError = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        textIn.setColumns(20);
+        textIn.setRows(5);
+        mainScroll.setViewportView(textIn);
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        messageArea.setColumns(20);
+        messageArea.setRows(5);
+        secScroll.setViewportView(messageArea);
 
-        jButton1.setText("Send");
+        sendButton.setText("Send");
+
+        javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
+        mainPanel.setLayout(mainPanelLayout);
+        mainPanelLayout.setHorizontalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addGap(58, 58, 58)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(mainScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 519, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addComponent(secScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(86, Short.MAX_VALUE))
+        );
+        mainPanelLayout.setVerticalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addContainerGap(41, Short.MAX_VALUE)
+                .addComponent(mainScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(secScroll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(38, 38, 38))
+        );
+
+        passwordInput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passwordInputActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Enter the password");
+
+        submitPasswordButton.setText("Submit");
+        submitPasswordButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitPasswordButtonActionPerformed(evt);
+            }
+        });
+
+        passwordError.setForeground(new java.awt.Color(255, 0, 0));
+        passwordError.setText("Wrong password");
+
+        jLabel2.setText("Enter your username");
+
+        userInput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                userInputActionPerformed(evt);
+            }
+        });
+
+        userError.setForeground(new java.awt.Color(255, 0, 0));
+        userError.setText("Can't leave username empty");
+
+        javax.swing.GroupLayout passPanelLayout = new javax.swing.GroupLayout(passPanel);
+        passPanel.setLayout(passPanelLayout);
+        passPanelLayout.setHorizontalGroup(
+            passPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(passPanelLayout.createSequentialGroup()
+                .addGroup(passPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(userInput, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(passPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(passPanelLayout.createSequentialGroup()
+                            .addGap(274, 274, 274)
+                            .addComponent(submitPasswordButton))
+                        .addGroup(passPanelLayout.createSequentialGroup()
+                            .addGap(78, 78, 78)
+                            .addGroup(passPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(passwordInput, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(passwordError)
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel2)
+                                .addComponent(userError)))))
+                .addContainerGap(273, Short.MAX_VALUE))
+        );
+        passPanelLayout.setVerticalGroup(
+            passPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(passPanelLayout.createSequentialGroup()
+                .addGap(55, 55, 55)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(userInput, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addComponent(userError)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(passwordInput, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(passwordError)
+                .addGap(59, 59, 59)
+                .addComponent(submitPasswordButton)
+                .addGap(56, 56, 56))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 519, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(23, Short.MAX_VALUE))
+            .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addComponent(passPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 44, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE))
-                .addContainerGap(26, Short.MAX_VALUE))
+            .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(passPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void passwordInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordInputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_passwordInputActionPerformed
+
+    private void submitPasswordButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitPasswordButtonActionPerformed
+        if(!userInput.getText().equals("")){
+            userError.setVisible(false);
+            //if(passwordInput.getText().equals(ServerGUI.s.getPassword())){
+                c = new Client(userInput.getText(), messageArea, sendButton, textIn);
+                mainPanel.setVisible(true);
+                passPanel.setVisible(false);
+                try {
+                    Thread t = new Thread(c);
+                    t.start();
+                } catch(Exception e){
+                    e.printStackTrace();
+                }
+                
+            //} else {
+                //}passwordError.setVisible(true);
+            //}
+        } else {
+            userError.setVisible(true);
+        }
+        
+    }//GEN-LAST:event_submitPasswordButtonActionPerformed
+
+    private void userInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userInputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_userInputActionPerformed
+
     /**
      * @param args the command line arguments
      */
+    public void myInit(){
+        passwordError.setVisible(false);
+        mainPanel.setVisible(false);
+        passPanel.setVisible(true);
+        userError.setVisible(false);
+    }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -111,10 +251,19 @@ public class ClientGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel mainPanel;
+    private javax.swing.JScrollPane mainScroll;
+    private javax.swing.JTextArea messageArea;
+    private javax.swing.JPanel passPanel;
+    private javax.swing.JLabel passwordError;
+    private javax.swing.JTextField passwordInput;
+    private javax.swing.JScrollPane secScroll;
+    private javax.swing.JButton sendButton;
+    private javax.swing.JButton submitPasswordButton;
+    private javax.swing.JTextArea textIn;
+    private javax.swing.JLabel userError;
+    private javax.swing.JTextField userInput;
     // End of variables declaration//GEN-END:variables
 }

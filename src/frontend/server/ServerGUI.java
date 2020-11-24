@@ -14,8 +14,7 @@ import java.io.PrintStream;
  */
 public class ServerGUI extends javax.swing.JFrame {
     
-    private Server s;
-    public PrintStream print;
+    public static Server s;
 
     /**
      * Creates new form ServerGUI
@@ -153,17 +152,16 @@ public class ServerGUI extends javax.swing.JFrame {
         if(passwordError.isVisible()){
             // Do nothing
         } else {
-            s = new Server(passwordInput.getText(), print);
+            s = new Server(passwordInput.getText(), serverLog);
             startServer();
-            introPanel.setVisible(false);
-            serverLog.setVisible(true);
+            Thread server = new Thread(s);
+            server.start();
         }
     }//GEN-LAST:event_startServerButtonActionPerformed
 
     private void startServer(){
         introPanel.setVisible(false);
         serverPanel.setVisible(true);
-        s.startServer();
     }
     
     /**
@@ -175,7 +173,6 @@ public class ServerGUI extends javax.swing.JFrame {
         passwordError.setVisible(false);
         passwordInput.setEnabled(false);
         serverLog.setEditable(false);
-        print = new PrintStream(new CustomOutputStream(serverLog));
     }
     
     public static void main(String args[]) {

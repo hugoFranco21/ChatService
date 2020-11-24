@@ -11,16 +11,25 @@ import java.net.Socket;
 import java.util.Scanner;
 
 import backend.server.ServerThread;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JTextArea;
 
-public class Client {
+public class Client implements Runnable{
 
     /* Future versions could change host to an ip
  * instead of localhost */    
     private final int portNumber = 4444;
 
     private String userName;
+    private String input;
     private String serverHost;
     private int serverPort;
+    private JTextArea messageIn;
+    private JTextArea messagesOut;
+    private JButton acceptInput;
+    private ServerThread serverThread;
 
     /*public static void main(String[] args) {
 	String readName = null;
@@ -42,30 +51,37 @@ public class Client {
 	client.startClient(scan);
     }*/
 
-    public Client(String userName) {
+    public Client(String userName, JTextArea messageIn, JButton acceptInput, JTextArea messagesOut) {
 	this.userName = userName;
 	this.serverHost = "localhost";
+        this.messageIn = messageIn;
+        this.acceptInput = acceptInput;
+        this.messagesOut = messagesOut;
     }
 
-    private void startClient(Scanner scan) {
+    public void startClient() throws IOException, InterruptedException {
 	try {
             Socket socket = new Socket(serverHost, portNumber);
             Thread.sleep(1000); // waiting for network communicating.
-            ServerThread serverThread = new ServerThread(socket, userName);
+            serverThread = new ServerThread(socket, userName, messagesOut);
             Thread serverAccessThread = new Thread(serverThread);
+            acceptInput.addActionListener((e)->{
+                sendMessage();
+            });
             serverAccessThread.start();
             while (serverAccessThread.isAlive()) {
-		if (scan.hasNextLine()) {
-                    serverThread.addNextMessage(scan.nextLine());
-		}
+		
+                
 		// NOTE: scan.hasNextLine waits input (in the other words block this thread's
 		// process).
 		// NOTE: If you use buffered reader or something else not waiting way,
 		// NOTE: I recommends write waiting short time like following.
 		// else {
-		// Thread.sleep(200);
+		Thread.sleep(200);
 		// }
             }
+
+
 	} catch (IOException ex) {
             System.err.println("Fatal Connection error!");
             ex.printStackTrace();
@@ -73,4 +89,30 @@ public class Client {
             System.out.println("Interrupted");
 	}
     }
+    
+    public void sendMessage(){
+        input = messageIn.getText();
+        serverThread.addNextMessage(input);
+        messageIn.setText("");
+    }
+
+    public class MyClass implements ActionListener { 
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            input = messageIn.getText();
+        }
+        
+    }
+    
+    @Override
+    public void run() {
+        try{
+             startClient();
+        } catch(Exception e){
+            
+        }
+      
+    }
+    
 }
